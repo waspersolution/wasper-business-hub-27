@@ -127,7 +127,7 @@ const Register = () => {
       navigate("/login", { 
         state: { message: "Registration successful! Please sign in." } 
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration failed", error);
       toast({
         title: "Registration failed",

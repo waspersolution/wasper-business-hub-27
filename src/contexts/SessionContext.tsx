@@ -7,7 +7,7 @@ const defaultSession: SessionContextType = {
   userId: '',
   currentCompanyId: '',
   currentBranchId: '',
-  currentRole: 'staff',
+  currentRole: 'staff' as UserRole, // Explicitly cast to UserRole to satisfy TypeScript
   isAuthenticated: false,
 };
 
@@ -15,12 +15,12 @@ type SessionContextProviderProps = {
   children: ReactNode;
 };
 
-// Create context
+// Create context with a default value
 const SessionContextData = createContext<{
   session: SessionContextType;
   setSession: (session: SessionContextType) => void;
   clearSession: () => void;
-  setRole: (role: UserRole) => void; // NEW for mock role switching
+  setRole: (role: UserRole) => void;
 }>({
   session: defaultSession,
   setSession: () => {},
@@ -34,16 +34,25 @@ export const useSession = () => useContext(SessionContextData);
 export const SessionProvider: React.FC<SessionContextProviderProps> = ({ children }) => {
   const [session, setSessionState] = useState<SessionContextType>(() => {
     // Try to get session from localStorage on initial load
-    const savedSession = localStorage.getItem('wasper_session');
-    return savedSession ? JSON.parse(savedSession) : defaultSession;
+    try {
+      const savedSession = localStorage.getItem('wasper_session');
+      return savedSession ? JSON.parse(savedSession) : defaultSession;
+    } catch (error) {
+      console.error('Failed to parse session from localStorage:', error);
+      return defaultSession;
+    }
   });
 
   // Update localStorage when session changes
   useEffect(() => {
-    if (session.isAuthenticated) {
-      localStorage.setItem('wasper_session', JSON.stringify(session));
-    } else {
-      localStorage.removeItem('wasper_session');
+    try {
+      if (session.isAuthenticated) {
+        localStorage.setItem('wasper_session', JSON.stringify(session));
+      } else {
+        localStorage.removeItem('wasper_session');
+      }
+    } catch (error) {
+      console.error('Failed to update session in localStorage:', error);
     }
   }, [session]);
 
@@ -56,13 +65,20 @@ export const SessionProvider: React.FC<SessionContextProviderProps> = ({ childre
     localStorage.removeItem('wasper_session');
   };
 
-  // NEW: Set only the current role (mock, for switching)
+  // Set only the current role (mock, for switching)
   const setRole = (role: UserRole) => {
     setSessionState((prev) => ({ ...prev, currentRole: role, isAuthenticated: true }));
   };
 
+  const contextValue = {
+    session,
+    setSession,
+    clearSession,
+    setRole
+  };
+
   return (
-    <SessionContextData.Provider value={{ session, setSession, clearSession, setRole }}>
+    <SessionContextData.Provider value={contextValue}>
       {children}
     </SessionContextData.Provider>
   );

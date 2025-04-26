@@ -66,13 +66,13 @@ const Login = () => {
         userId: authData.user.id,
         currentCompanyId: roleAssignments.company_id,
         currentBranchId: roleAssignments.branch_id || '',
-        currentRole: roleAssignments.role,
+        currentRole: roleAssignments.role as any, // Type assertion to make TS happy
         isAuthenticated: true,
       });
       
       // Redirect to dashboard
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login failed", error);
       toast({
         title: "Login failed",
