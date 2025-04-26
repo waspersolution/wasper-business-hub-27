@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Card,
   CardContent,
@@ -20,6 +22,7 @@ import { registerSchema, type RegisterFormValues } from "./auth/schemas/register
 
 const Register = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLogo, setSelectedLogo] = useState<File | null>(null);
 
@@ -44,15 +47,93 @@ const Register = () => {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 1. Sign up the user with Supabase
+      const { error: signUpError, data: authData } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.fullName,
+          }
+        }
+      });
+
+      if (signUpError) throw signUpError;
+
+      if (!authData.user) throw new Error("Failed to create user");
+
+      // 2. Create company
+      const { error: companyError, data: company } = await supabase
+        .from('companies')
+        .insert({
+          name: data.companyName,
+          created_by: authData.user.id,
+          currency: data.currency,
+          timezone: data.timezone,
+          fiscal_year_start: data.fiscalYearStart,
+          accounting_start: data.accountingStart,
+        })
+        .select()
+        .single();
+
+      if (companyError) throw companyError;
+
+      // 3. Create main branch
+      const { error: branchError } = await supabase
+        .from('branches')
+        .insert({
+          name: 'Main Branch',
+          company_id: company.id,
+          is_main_branch: true,
+        });
+
+      if (branchError) throw branchError;
+
+      // 4. Assign company_admin role
+      const { error: roleError } = await supabase
+        .from('user_role_assignments')
+        .insert({
+          user_id: authData.user.id,
+          company_id: company.id,
+          role: 'company_admin',
+        });
+
+      if (roleError) throw roleError;
+
+      // If logo was selected, upload it
+      if (selectedLogo) {
+        const { error: storageError } = await supabase
+          .storage
+          .from('company-logos')
+          .upload(`${company.id}/${selectedLogo.name}`, selectedLogo);
+
+        if (!storageError) {
+          // Update company with logo URL
+          await supabase
+            .from('companies')
+            .update({
+              logo_url: `${company.id}/${selectedLogo.name}`
+            })
+            .eq('id', company.id);
+        }
+      }
+
+      // Registration successful
+      toast({
+        title: "Registration successful!",
+        description: "Please sign in with your credentials.",
+      });
       
-      // Redirect to login page after successful registration
       navigate("/login", { 
         state: { message: "Registration successful! Please sign in." } 
       });
     } catch (error) {
       console.error("Registration failed", error);
+      toast({
+        title: "Registration failed",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }

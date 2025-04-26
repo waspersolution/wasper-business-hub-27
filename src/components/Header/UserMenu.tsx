@@ -1,8 +1,9 @@
-
 import { Link } from "react-router-dom";
 import { useSession } from "@/contexts/SessionContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,17 +14,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const UserMenu = () => {
-  const { clearSession } = useSession();
+  const { session, clearSession } = useSession();
+  const { toast } = useToast();
 
   const getUserInitials = () => {
     // This is a placeholder - in a real app you would use the user's name
     return "WB";
   };
 
-  const handleLogout = () => {
-    clearSession();
-    // Redirect to login page
-    window.location.href = "/login";
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      clearSession();
+      // Redirect to login page
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast({
+        title: "Logout failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (

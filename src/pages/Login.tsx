@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Form,
   FormControl,
@@ -28,6 +30,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 const Login = () => {
   const navigate = useNavigate();
   const { setSession } = useSession();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<LoginFormValues>({
@@ -38,20 +41,32 @@ const Login = () => {
     },
   });
 
-  // Mock login function (would connect to Supabase in a real implementation)
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock successful authentication
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (error) throw error;
+
+      // Get user's role assignments
+      const { data: roleAssignments, error: roleError } = await supabase
+        .from('user_role_assignments')
+        .select('role, company_id, branch_id')
+        .eq('user_id', authData.user.id)
+        .single();
+
+      if (roleError) throw roleError;
+
+      // Set session context with user info and role
       setSession({
-        userId: "user-123",
-        currentCompanyId: "company-123",
-        currentBranchId: "branch-123",
-        currentRole: "company_admin",
+        userId: authData.user.id,
+        currentCompanyId: roleAssignments.company_id,
+        currentBranchId: roleAssignments.branch_id || '',
+        currentRole: roleAssignments.role,
         isAuthenticated: true,
       });
       
@@ -59,6 +74,11 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
+      toast({
+        title: "Login failed",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }

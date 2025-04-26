@@ -9,7 +9,167 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      branches: {
+        Row: {
+          address: string | null
+          company_id: string
+          created_at: string
+          id: string
+          is_main_branch: boolean | null
+          manager_id: string | null
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          address?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          is_main_branch?: boolean | null
+          manager_id?: string | null
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          address?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          is_main_branch?: boolean | null
+          manager_id?: string | null
+          name?: string
+          phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      companies: {
+        Row: {
+          accounting_start: string
+          address: string | null
+          created_at: string
+          created_by: string
+          currency: string
+          email: string | null
+          fiscal_year_start: string
+          id: string
+          logo_url: string | null
+          name: string
+          phone: string | null
+          subscription_expiry: string | null
+          subscription_plan: string | null
+          subscription_status: string | null
+          timezone: string
+        }
+        Insert: {
+          accounting_start?: string
+          address?: string | null
+          created_at?: string
+          created_by: string
+          currency?: string
+          email?: string | null
+          fiscal_year_start?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+          subscription_expiry?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
+          timezone?: string
+        }
+        Update: {
+          accounting_start?: string
+          address?: string | null
+          created_at?: string
+          created_by?: string
+          currency?: string
+          email?: string | null
+          fiscal_year_start?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+          subscription_expiry?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
+          timezone?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_role_assignments: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          id: string
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          role: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_role_assignments_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_role_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
