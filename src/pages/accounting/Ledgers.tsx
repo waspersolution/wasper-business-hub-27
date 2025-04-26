@@ -20,7 +20,7 @@ const mockLedgers = [
   },
 ];
 
-export default function AccountingLedgers() {
+const Ledgers = () => {
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Accounting Ledgers</h1>
@@ -50,4 +50,6 @@ export default function AccountingLedgers() {
       </Table>
     </div>
   );
-}
+};
+
+export default Ledgers;

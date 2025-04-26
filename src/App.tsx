@@ -1,7 +1,8 @@
+
 import { Routes, Route } from "react-router-dom";
-import { Index } from "@/pages/Index";
-import { Dashboard } from "@/pages/Dashboard";
-import { NotFound } from "@/pages/NotFound";
+import Index from "@/pages/Index";
+import Dashboard from "@/pages/Dashboard";
+import NotFound from "@/pages/NotFound";
 import { DashboardLayout } from "@/components/Layout/DashboardLayout";
 import { Toaster } from "@/components/ui/toaster";
 import Login from "@/pages/Login";
@@ -9,85 +10,85 @@ import Register from "@/pages/Register";
 import { SessionProvider } from "@/contexts/SessionContext";
 
 // Accounting routes
-import { ChartOfAccounts } from "@/pages/accounting/ChartOfAccounts";
-import { JournalEntries } from "@/pages/accounting/JournalEntries";
-import { BankAccounts } from "@/pages/accounting/BankAccounts";
-import { Reconciliation } from "@/pages/accounting/Reconciliation";
-import { Ledgers } from "@/pages/accounting/Ledgers";
-import { TaxSettings } from "@/pages/accounting/TaxSettings";
-import { YearEndClosing } from "@/pages/accounting/YearEndClosing";
+import ChartOfAccounts from "@/pages/accounting/ChartOfAccounts";
+import JournalEntries from "@/pages/accounting/JournalEntries";
+import BankAccounts from "@/pages/accounting/BankAccounts";
+import Reconciliation from "@/pages/accounting/Reconciliation";
+import Ledgers from "@/pages/accounting/Ledgers";
+import TaxSettings from "@/pages/accounting/TaxSettings";
+import YearEndClosing from "@/pages/accounting/YearEndClosing";
 
 // Reports routes
-import { Dashboard as ReportsDashboard } from "@/pages/reports/Dashboard";
-import { ProfitLoss } from "@/pages/reports/ProfitLoss";
-import { BalanceSheet } from "@/pages/reports/BalanceSheet";
-import { CashFlow } from "@/pages/reports/CashFlow";
-import { TrialBalance } from "@/pages/reports/TrialBalance";
-import { Sales as SalesReports } from "@/pages/reports/Sales";
-import { Stock } from "@/pages/reports/Stock";
-import { DeadStock } from "@/pages/reports/DeadStock";
-import { Financials } from "@/pages/reports/Financials";
+import ReportsDashboard from "@/pages/reports/Dashboard";
+import ProfitLoss from "@/pages/reports/ProfitLoss";
+import BalanceSheet from "@/pages/reports/BalanceSheet";
+import CashFlow from "@/pages/reports/CashFlow";
+import TrialBalance from "@/pages/reports/TrialBalance";
+import SalesReports from "@/pages/reports/Sales";
+import Stock from "@/pages/reports/Stock";
+import DeadStock from "@/pages/reports/DeadStock";
+import Financials from "@/pages/reports/Financials";
 
 // Sales routes
-import { History } from "@/pages/sales/History";
-import { POS } from "@/pages/sales/POS";
-import { POSAddItem } from "@/pages/sales/POSAddItem";
-import { Customers } from "@/pages/sales/Customers";
-import { CustomerGroups } from "@/pages/sales/CustomerGroups";
-import { Quotations } from "@/pages/sales/Quotations";
-import { Deliveries } from "@/pages/sales/Deliveries";
-import { Returns as SalesReturns } from "@/pages/sales/Returns";
-import { Discounts } from "@/pages/sales/Discounts";
-import { PaymentPlans } from "@/pages/sales/PaymentPlans";
+import History from "@/pages/sales/History";
+import POS from "@/pages/sales/POS";
+import POSAddItem from "@/pages/sales/POSAddItem";
+import Customers from "@/pages/sales/Customers";
+import CustomerGroups from "@/pages/sales/CustomerGroups";
+import Quotations from "@/pages/sales/Quotations";
+import Deliveries from "@/pages/sales/Deliveries";
+import SalesReturns from "@/pages/sales/Returns";
+import Discounts from "@/pages/sales/Discounts";
+import PaymentPlans from "@/pages/sales/PaymentPlans";
 
 // Inventory routes
-import { Products } from "@/pages/inventory/Products";
-import { StockAdjustments } from "@/pages/inventory/StockAdjustments";
-import { Transfers } from "@/pages/inventory/Transfers";
-import { ReorderAlerts } from "@/pages/inventory/ReorderAlerts";
+import Products from "@/pages/inventory/Products";
+import StockAdjustments from "@/pages/inventory/StockAdjustments";
+import Transfers from "@/pages/inventory/Transfers";
+import ReorderAlerts from "@/pages/inventory/ReorderAlerts";
 
 // Purchases routes
-import { Suppliers } from "@/pages/purchases/Suppliers";
-import { SupplierGroups } from "@/pages/purchases/SupplierGroups";
-import { Orders } from "@/pages/purchases/Orders";
-import { GoodsReceived } from "@/pages/purchases/GoodsReceived";
-import { Ledger as PurchasesLedger } from "@/pages/purchases/Ledger";
-import { Returns as PurchasesReturns } from "@/pages/purchases/Returns";
+import Suppliers from "@/pages/purchases/Suppliers";
+import SupplierGroups from "@/pages/purchases/SupplierGroups";
+import Orders from "@/pages/purchases/Orders";
+import GoodsReceived from "@/pages/purchases/GoodsReceived";
+import PurchasesLedger from "@/pages/purchases/Ledger";
+import PurchasesReturns from "@/pages/purchases/Returns";
 
 // Audit logs routes
-import { AuditLogs } from "@/pages/audit-logs/AuditLogs";
-import { LoginHistory } from "@/pages/audit-logs/LoginHistory";
-import { RecordChanges } from "@/pages/audit-logs/RecordChanges";
-import { UserActivities } from "@/pages/audit-logs/UserActivities";
+import AuditLogs from "@/pages/audit-logs/AuditLogs";
+import LoginHistory from "@/pages/audit-logs/LoginHistory";
+import RecordChanges from "@/pages/audit-logs/RecordChanges";
+import UserActivities from "@/pages/audit-logs/UserActivities";
 
 // Settings routes
-import { Settings } from "@/pages/settings/Settings";
-import { Users } from "@/pages/settings/Users";
-import { Companies } from "@/pages/settings/Companies";
-import { DeviceManagement } from "@/pages/settings/DeviceManagement";
-import { POSSettings } from "@/pages/settings/POSSettings";
-import { ReceiptSettings } from "@/pages/settings/ReceiptSettings";
-import { Attributes } from "@/pages/settings/Attributes";
-import { Permissions } from "@/pages/settings/Permissions";
-import { TaxCurrencies } from "@/pages/settings/TaxCurrencies";
-import { Localization } from "@/pages/settings/Localization";
-import { BackupRestore } from "@/pages/settings/BackupRestore";
-import { DeveloperTools } from "@/pages/settings/DeveloperTools";
+import Settings from "@/pages/settings/Settings";
+import Users from "@/pages/settings/Users";
+import Companies from "@/pages/settings/Companies";
+import DeviceManagement from "@/pages/settings/DeviceManagement";
+import POSSettings from "@/pages/settings/POSSettings";
+import ReceiptSettings from "@/pages/settings/ReceiptSettings";
+import Attributes from "@/pages/settings/Attributes";
+import Permissions from "@/pages/settings/Permissions";
+import TaxCurrencies from "@/pages/settings/TaxCurrencies";
+import Localization from "@/pages/settings/Localization";
+import BackupRestore from "@/pages/settings/BackupRestore";
+import DeveloperTools from "@/pages/settings/DeveloperTools";
 
 // Notification routes
-import { Templates } from "@/pages/notifications/Templates";
-import { NotificationTemplatesPage } from "@/pages/notifications/NotificationTemplatesPage";
+import Templates from "@/pages/notifications/Templates";
+import NotificationTemplatesPage from "@/pages/notifications/NotificationTemplatesPage";
 
 // Billing routes
-import { Subscription } from "@/pages/billing/Subscription";
-import { PaymentHistory } from "@/pages/billing/PaymentHistory";
-import { UpgradePlan } from "@/pages/billing/UpgradePlan";
+import Subscription from "@/pages/billing/Subscription";
+import PaymentHistory from "@/pages/billing/PaymentHistory";
+import UpgradePlan from "@/pages/billing/UpgradePlan";
 
 // Import routes
-import { CustomerImport } from "@/pages/extras/imports/CustomerImport";
-import { ProductImport } from "@/pages/extras/imports/ProductImport";
-import { SalesImport } from "@/pages/extras/imports/SalesImport";
-import { Attachments } from "@/pages/extras/documents/Attachments";
+import CustomerImport from "@/pages/extras/imports/CustomerImport";
+import ProductImport from "@/pages/extras/imports/ProductImport";
+import SalesImport from "@/pages/extras/imports/SalesImport";
+import Attachments from "@/pages/extras/documents/Attachments";
 
 function App() {
   return (
