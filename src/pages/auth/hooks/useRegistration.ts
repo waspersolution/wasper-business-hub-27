@@ -39,13 +39,12 @@ export function useRegistration() {
       const { error: companyError, data: company } = await supabase
         .from('companies')
         .insert({
-          // Use the exact column names from the Supabase table schema
           name: data.companyName,
           created_by: authData.user.id,
           currency: data.currency,
           timezone: data.timezone,
-          fiscal_year_start: data.fiscalYearStart.toISOString().split('T')[0],
-          accounting_start: data.accountingStart.toISOString().split('T')[0],
+          fiscal_year_start: data.fiscalYearStart.toISOString().split('T')[0], // Format as YYYY-MM-DD
+          accounting_start: data.accountingStart.toISOString().split('T')[0], // Format as YYYY-MM-DD
         })
         .select()
         .single();
@@ -76,17 +75,20 @@ export function useRegistration() {
 
       // If logo was selected, upload it
       if (selectedLogo) {
+        const fileExt = selectedLogo.name.split('.').pop();
+        const filePath = `${company.id}/${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
         const { error: storageError } = await supabase
           .storage
           .from('company-logos')
-          .upload(`${company.id}/${selectedLogo.name}`, selectedLogo);
+          .upload(filePath, selectedLogo);
 
         if (!storageError) {
           // Update company with logo URL
           await supabase
             .from('companies')
             .update({
-              logo_url: `${company.id}/${selectedLogo.name}`
+              logo_url: filePath
             })
             .eq('id', company.id);
         }
@@ -103,9 +105,19 @@ export function useRegistration() {
       });
     } catch (error: any) {
       console.error("Registration failed", error);
+      
+      // Handle specific error types for better user feedback
+      let errorMessage = "Registration failed. Please try again.";
+      
+      if (error.message.includes("Email already registered")) {
+        errorMessage = "This email is already registered. Please use another email or sign in.";
+      } else if (error.message.includes("password")) {
+        errorMessage = "Password must be at least 6 characters long.";
+      }
+      
       toast({
         title: "Registration failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
