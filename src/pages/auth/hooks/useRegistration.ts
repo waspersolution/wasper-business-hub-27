@@ -32,7 +32,6 @@ export function useRegistration() {
       });
 
       if (signUpError) throw signUpError;
-
       if (!authData.user) throw new Error("Failed to create user");
 
       // 2. Create company - Ensure property names match exactly with database schema
@@ -43,8 +42,8 @@ export function useRegistration() {
           created_by: authData.user.id,
           currency: data.currency,
           timezone: data.timezone,
-          fiscal_year_start: data.fiscalYearStart.toISOString().split('T')[0], // Format as YYYY-MM-DD
-          accounting_start: data.accountingStart.toISOString().split('T')[0], // Format as YYYY-MM-DD
+          fiscal_year_start: data.fiscalYearStart.toISOString().split('T')[0],
+          accounting_start: data.accountingStart.toISOString().split('T')[0],
         })
         .select()
         .single();
