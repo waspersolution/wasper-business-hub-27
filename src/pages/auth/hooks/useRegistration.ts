@@ -40,7 +40,7 @@ export function useRegistration() {
 
       if (!authData.user) throw new Error("Failed to create user account");
 
-      // 2. Create company with exact field names matching the database schema
+      // 2. Create company with proper date formatting
       const { error: companyError, data: company } = await supabase
         .from('companies')
         .insert({
@@ -58,6 +58,8 @@ export function useRegistration() {
         console.error("Company creation error:", companyError);
         throw new Error("Failed to create company. Please try again.");
       }
+
+      if (!company) throw new Error("Company creation failed");
 
       // 3. Create main branch
       const { error: branchError } = await supabase
@@ -87,7 +89,7 @@ export function useRegistration() {
         throw new Error("Failed to assign user role. Please try again.");
       }
 
-      // If logo was selected, upload it
+      // Handle logo upload if provided
       if (selectedLogo) {
         const fileExt = selectedLogo.name.split('.').pop();
         const filePath = `${company.id}/${Math.random().toString(36).substring(2)}.${fileExt}`;
@@ -122,7 +124,6 @@ export function useRegistration() {
     } catch (error: any) {
       console.error("Registration failed:", error);
       
-      // Provide specific error message when possible
       let errorMessage = "Registration failed. Please try again.";
       
       if (error.message) {
@@ -131,7 +132,6 @@ export function useRegistration() {
         } else if (error.message.includes("password")) {
           errorMessage = "Password must be at least 6 characters long.";
         } else {
-          // Use the custom error message if we have one
           errorMessage = error.message;
         }
       }
