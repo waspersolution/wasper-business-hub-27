@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
@@ -132,7 +131,6 @@ export function LoginHistory() {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   
-  // Filter logs based on search term, status, device, and date
   const filteredLogs = mockLoginHistory.filter(log => {
     const matchesSearch = searchTerm === "" || 
       log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -347,3 +345,5 @@ export function LoginHistory() {
     </>
   );
 }
+
+export default LoginHistory;

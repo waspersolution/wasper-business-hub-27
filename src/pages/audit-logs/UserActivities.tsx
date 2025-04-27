@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
@@ -123,7 +122,6 @@ export function UserActivities() {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   
-  // Filter logs based on search term, module, status, and date
   const filteredLogs = mockUserActivities.filter(log => {
     const matchesSearch = searchTerm === "" || 
       log.detail.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -316,3 +314,5 @@ export function UserActivities() {
     </>
   );
 }
+
+export default UserActivities;

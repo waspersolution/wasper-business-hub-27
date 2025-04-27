@@ -62,3 +62,5 @@ export function RecordChanges() {
     </>
   );
 }
+
+export default RecordChanges;

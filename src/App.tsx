@@ -1,4 +1,3 @@
-
 import { Routes, Route } from "react-router-dom";
 import Index from "@/pages/Index";
 import Dashboard from "@/pages/Dashboard";
@@ -57,9 +56,9 @@ import PurchasesReturns from "@/pages/purchases/Returns";
 
 // Audit logs routes
 import AuditLogs from "@/pages/audit-logs/AuditLogs";
-import LoginHistory from "@/pages/audit-logs/LoginHistory";
-import RecordChanges from "@/pages/audit-logs/RecordChanges";
-import UserActivities from "@/pages/audit-logs/UserActivities";
+import { LoginHistory } from "@/pages/audit-logs/LoginHistory";
+import { RecordChanges } from "@/pages/audit-logs/RecordChanges";
+import { UserActivities } from "@/pages/audit-logs/UserActivities";
 
 // Settings routes
 import Settings from "@/pages/settings/Settings";
@@ -100,90 +99,92 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* Dashboard routes */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="accounting/chart-of-accounts" element={<ChartOfAccounts />} />
-          <Route path="accounting/journal-entries" element={<JournalEntries />} />
-          <Route path="accounting/bank-accounts" element={<BankAccounts />} />
-          <Route path="accounting/reconciliation" element={<Reconciliation />} />
-          <Route path="accounting/ledgers" element={<Ledgers />} />
-          <Route path="accounting/tax-settings" element={<TaxSettings />} />
-          <Route path="accounting/year-end-closing" element={<YearEndClosing />} />
+        <Route path="/dashboard" element={<DashboardLayout>
+          <Routes>
+            <Route index element={<Dashboard />} />
+            <Route path="accounting/chart-of-accounts" element={<ChartOfAccounts />} />
+            <Route path="accounting/journal-entries" element={<JournalEntries />} />
+            <Route path="accounting/bank-accounts" element={<BankAccounts />} />
+            <Route path="accounting/reconciliation" element={<Reconciliation />} />
+            <Route path="accounting/ledgers" element={<Ledgers />} />
+            <Route path="accounting/tax-settings" element={<TaxSettings />} />
+            <Route path="accounting/year-end-closing" element={<YearEndClosing />} />
 
-          {/* Reports routes */}
-          <Route path="reports/dashboard" element={<ReportsDashboard />} />
-          <Route path="reports/profit-loss" element={<ProfitLoss />} />
-          <Route path="reports/balance-sheet" element={<BalanceSheet />} />
-          <Route path="reports/cash-flow" element={<CashFlow />} />
-          <Route path="reports/trial-balance" element={<TrialBalance />} />
-          <Route path="reports/sales" element={<SalesReports />} />
-          <Route path="reports/stock" element={<Stock />} />
-          <Route path="reports/dead-stock" element={<DeadStock />} />
-          <Route path="reports/financials" element={<Financials />} />
+            {/* Reports routes */}
+            <Route path="reports/dashboard" element={<ReportsDashboard />} />
+            <Route path="reports/profit-loss" element={<ProfitLoss />} />
+            <Route path="reports/balance-sheet" element={<BalanceSheet />} />
+            <Route path="reports/cash-flow" element={<CashFlow />} />
+            <Route path="reports/trial-balance" element={<TrialBalance />} />
+            <Route path="reports/sales" element={<SalesReports />} />
+            <Route path="reports/stock" element={<Stock />} />
+            <Route path="reports/dead-stock" element={<DeadStock />} />
+            <Route path="reports/financials" element={<Financials />} />
 
-          {/* Sales routes */}
-          <Route path="sales/history" element={<History />} />
-          <Route path="sales/pos" element={<POS />} />
-          <Route path="sales/pos-add-item" element={<POSAddItem />} />
-          <Route path="sales/customers" element={<Customers />} />
-          <Route path="sales/customer-groups" element={<CustomerGroups />} />
-          <Route path="sales/quotations" element={<Quotations />} />
-          <Route path="sales/deliveries" element={<Deliveries />} />
-          <Route path="sales/returns" element={<SalesReturns />} />
-          <Route path="sales/discounts" element={<Discounts />} />
-          <Route path="sales/payment-plans" element={<PaymentPlans />} />
+            {/* Sales routes */}
+            <Route path="sales/history" element={<History />} />
+            <Route path="sales/pos" element={<POS />} />
+            <Route path="sales/pos-add-item" element={<POSAddItem />} />
+            <Route path="sales/customers" element={<Customers />} />
+            <Route path="sales/customer-groups" element={<CustomerGroups />} />
+            <Route path="sales/quotations" element={<Quotations />} />
+            <Route path="sales/deliveries" element={<Deliveries />} />
+            <Route path="sales/returns" element={<SalesReturns />} />
+            <Route path="sales/discounts" element={<Discounts />} />
+            <Route path="sales/payment-plans" element={<PaymentPlans />} />
 
-          {/* Inventory routes */}
-          <Route path="inventory/products" element={<Products />} />
-          <Route path="inventory/stock-adjustments" element={<StockAdjustments />} />
-          <Route path="inventory/transfers" element={<Transfers />} />
-          <Route path="inventory/reorder-alerts" element={<ReorderAlerts />} />
+            {/* Inventory routes */}
+            <Route path="inventory/products" element={<Products />} />
+            <Route path="inventory/stock-adjustments" element={<StockAdjustments />} />
+            <Route path="inventory/transfers" element={<Transfers />} />
+            <Route path="inventory/reorder-alerts" element={<ReorderAlerts />} />
 
-          {/* Purchases routes */}
-          <Route path="purchases/suppliers" element={<Suppliers />} />
-          <Route path="purchases/supplier-groups" element={<SupplierGroups />} />
-          <Route path="purchases/orders" element={<Orders />} />
-          <Route path="purchases/goods-received" element={<GoodsReceived />} />
-          <Route path="purchases/ledger" element={<PurchasesLedger />} />
-          <Route path="purchases/returns" element={<PurchasesReturns />} />
+            {/* Purchases routes */}
+            <Route path="purchases/suppliers" element={<Suppliers />} />
+            <Route path="purchases/supplier-groups" element={<SupplierGroups />} />
+            <Route path="purchases/orders" element={<Orders />} />
+            <Route path="purchases/goods-received" element={<GoodsReceived />} />
+            <Route path="purchases/ledger" element={<PurchasesLedger />} />
+            <Route path="purchases/returns" element={<PurchasesReturns />} />
 
-          {/* Audit logs routes */}
-          <Route path="audit-logs/audit-logs" element={<AuditLogs />} />
-          <Route path="audit-logs/login-history" element={<LoginHistory />} />
-          <Route path="audit-logs/record-changes" element={<RecordChanges />} />
-          <Route path="audit-logs/user-activities" element={<UserActivities />} />
+            {/* Audit logs routes */}
+            <Route path="audit-logs/audit-logs" element={<AuditLogs />} />
+            <Route path="audit-logs/login-history" element={<LoginHistory />} />
+            <Route path="audit-logs/record-changes" element={<RecordChanges />} />
+            <Route path="audit-logs/user-activities" element={<UserActivities />} />
 
-          {/* Settings routes */}
-          <Route path="settings/settings" element={<Settings />} />
-          <Route path="settings/users" element={<Users />} />
-          <Route path="settings/companies" element={<Companies />} />
-          <Route path="settings/device-management" element={<DeviceManagement />} />
-          <Route path="settings/pos-settings" element={<POSSettings />} />
-          <Route path="settings/receipt-settings" element={<ReceiptSettings />} />
-          <Route path="settings/attributes" element={<Attributes />} />
-          <Route path="settings/permissions" element={<Permissions />} />
-          <Route path="settings/tax-currencies" element={<TaxCurrencies />} />
-          <Route path="settings/localization" element={<Localization />} />
-          <Route path="settings/backup-restore" element={<BackupRestore />} />
-          <Route path="settings/developer-tools" element={<DeveloperTools />} />
+            {/* Settings routes */}
+            <Route path="settings/settings" element={<Settings />} />
+            <Route path="settings/users" element={<Users />} />
+            <Route path="settings/companies" element={<Companies />} />
+            <Route path="settings/device-management" element={<DeviceManagement />} />
+            <Route path="settings/pos-settings" element={<POSSettings />} />
+            <Route path="settings/receipt-settings" element={<ReceiptSettings />} />
+            <Route path="settings/attributes" element={<Attributes />} />
+            <Route path="settings/permissions" element={<Permissions />} />
+            <Route path="settings/tax-currencies" element={<TaxCurrencies />} />
+            <Route path="settings/localization" element={<Localization />} />
+            <Route path="settings/backup-restore" element={<BackupRestore />} />
+            <Route path="settings/developer-tools" element={<DeveloperTools />} />
 
-          {/* Notification routes */}
-          <Route path="notifications/templates" element={<Templates />} />
-          <Route path="notifications/notification-templates" element={<NotificationTemplatesPage />} />
+            {/* Notification routes */}
+            <Route path="notifications/templates" element={<Templates />} />
+            <Route path="notifications/notification-templates" element={<NotificationTemplatesPage />} />
 
-          {/* Billing routes */}
-          <Route path="billing/subscription" element={<Subscription />} />
-          <Route path="billing/payment-history" element={<PaymentHistory />} />
-          <Route path="billing/upgrade-plan" element={<UpgradePlan />} />
+            {/* Billing routes */}
+            <Route path="billing/subscription" element={<Subscription />} />
+            <Route path="billing/payment-history" element={<PaymentHistory />} />
+            <Route path="billing/upgrade-plan" element={<UpgradePlan />} />
 
-          {/* Import routes */}
-          <Route path="extras/imports/customer-import" element={<CustomerImport />} />
-          <Route path="extras/imports/product-import" element={<ProductImport />} />
-          <Route path="extras/imports/sales-import" element={<SalesImport />} />
+            {/* Import routes */}
+            <Route path="extras/imports/customer-import" element={<CustomerImport />} />
+            <Route path="extras/imports/product-import" element={<ProductImport />} />
+            <Route path="extras/imports/sales-import" element={<SalesImport />} />
 
-          {/* Document routes */}
-          <Route path="extras/documents/attachments" element={<Attachments />} />
-        </Route>
+            {/* Document routes */}
+            <Route path="extras/documents/attachments" element={<Attachments />} />
+          </Routes>
+        </DashboardLayout>} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
