@@ -62,16 +62,17 @@ const Register = () => {
 
       if (!authData.user) throw new Error("Failed to create user");
 
-      // 2. Create company - Fix the property names to match the database schema
+      // 2. Create company - Ensure property names match exactly with database schema
       const { error: companyError, data: company } = await supabase
         .from('companies')
         .insert({
+          // Use the exact column names from the Supabase table schema
           name: data.companyName,
           created_by: authData.user.id,
           currency: data.currency,
           timezone: data.timezone,
-          fiscal_year_start: data.fiscalYearStart,
-          accounting_start: data.accountingStart,
+          fiscal_year_start: data.fiscalYearStart.toISOString().split('T')[0],
+          accounting_start: data.accountingStart.toISOString().split('T')[0],
         })
         .select()
         .single();
