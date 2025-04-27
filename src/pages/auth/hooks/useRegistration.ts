@@ -31,10 +31,16 @@ export function useRegistration() {
         }
       });
 
-      if (signUpError) throw signUpError;
-      if (!authData.user) throw new Error("Failed to create user");
+      if (signUpError) {
+        if (signUpError.message.includes("Email address")) {
+          throw new Error("This email is already registered. Please use a different email or sign in.");
+        }
+        throw signUpError;
+      }
 
-      // 2. Create company - Ensure property names match exactly with database schema
+      if (!authData.user) throw new Error("Failed to create user account");
+
+      // 2. Create company
       const { error: companyError, data: company } = await supabase
         .from('companies')
         .insert({
@@ -83,7 +89,6 @@ export function useRegistration() {
           .upload(filePath, selectedLogo);
 
         if (!storageError) {
-          // Update company with logo URL
           await supabase
             .from('companies')
             .update({
@@ -103,16 +108,11 @@ export function useRegistration() {
         state: { message: "Registration successful! Please sign in." } 
       });
     } catch (error: any) {
-      console.error("Registration failed", error);
+      console.error("Registration failed:", error);
       
-      // Handle specific error types for better user feedback
-      let errorMessage = "Registration failed. Please try again.";
-      
-      if (error.message.includes("Email already registered")) {
-        errorMessage = "This email is already registered. Please use another email or sign in.";
-      } else if (error.message.includes("password")) {
-        errorMessage = "Password must be at least 6 characters long.";
-      }
+      const errorMessage = error.message.includes("Email address")
+        ? "This email is already registered. Please use a different email or sign in."
+        : "Registration failed. Please try again.";
       
       toast({
         title: "Registration failed",
