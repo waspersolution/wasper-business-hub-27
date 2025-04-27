@@ -62,7 +62,7 @@ const Register = () => {
 
       if (!authData.user) throw new Error("Failed to create user");
 
-      // 2. Create company
+      // 2. Create company - Fix the property names to match the database schema
       const { error: companyError, data: company } = await supabase
         .from('companies')
         .insert({
