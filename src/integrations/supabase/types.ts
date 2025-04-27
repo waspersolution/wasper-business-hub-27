@@ -175,7 +175,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_user_role_assignment: {
+        Args: { user_uuid: string; company_uuid: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

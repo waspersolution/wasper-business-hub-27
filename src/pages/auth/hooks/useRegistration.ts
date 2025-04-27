@@ -40,7 +40,7 @@ export function useRegistration() {
 
       if (!authData.user) throw new Error("Failed to create user account");
 
-      // 2. Create company
+      // 2. Create company with exact field names matching the database schema
       const { error: companyError, data: company } = await supabase
         .from('companies')
         .insert({
@@ -54,7 +54,10 @@ export function useRegistration() {
         .select()
         .single();
 
-      if (companyError) throw companyError;
+      if (companyError) {
+        console.error("Company creation error:", companyError);
+        throw new Error("Failed to create company. Please try again.");
+      }
 
       // 3. Create main branch
       const { error: branchError } = await supabase
@@ -65,7 +68,10 @@ export function useRegistration() {
           is_main_branch: true,
         });
 
-      if (branchError) throw branchError;
+      if (branchError) {
+        console.error("Branch creation error:", branchError);
+        throw new Error("Failed to create branch. Please try again.");
+      }
 
       // 4. Assign company_admin role
       const { error: roleError } = await supabase
@@ -76,7 +82,10 @@ export function useRegistration() {
           role: 'company_admin',
         });
 
-      if (roleError) throw roleError;
+      if (roleError) {
+        console.error("Role assignment error:", roleError);
+        throw new Error("Failed to assign user role. Please try again.");
+      }
 
       // If logo was selected, upload it
       if (selectedLogo) {
@@ -95,6 +104,9 @@ export function useRegistration() {
               logo_url: filePath
             })
             .eq('id', company.id);
+        } else {
+          console.error("Logo upload error:", storageError);
+          // Don't fail the registration if just the logo upload fails
         }
       }
 
@@ -110,9 +122,19 @@ export function useRegistration() {
     } catch (error: any) {
       console.error("Registration failed:", error);
       
-      const errorMessage = error.message.includes("Email address")
-        ? "This email is already registered. Please use a different email or sign in."
-        : "Registration failed. Please try again.";
+      // Provide specific error message when possible
+      let errorMessage = "Registration failed. Please try again.";
+      
+      if (error.message) {
+        if (error.message.includes("Email address") || error.message.includes("already registered")) {
+          errorMessage = "This email is already registered. Please use a different email or sign in.";
+        } else if (error.message.includes("password")) {
+          errorMessage = "Password must be at least 6 characters long.";
+        } else {
+          // Use the custom error message if we have one
+          errorMessage = error.message;
+        }
+      }
       
       toast({
         title: "Registration failed",
