@@ -86,7 +86,7 @@ export const useCompanySetup = () => {
         throw new Error("Failed to create branch. Please try again.");
       }
 
-      // 3. Use direct SQL RPC to avoid role assignment issues
+      // 3. Call the Edge Function to assign company admin role
       // This avoids the infinite recursion in RLS policies
       const { error: roleError } = await supabase.functions.invoke('assign-company-role', {
         body: { 
@@ -98,7 +98,7 @@ export const useCompanySetup = () => {
 
       if (roleError) {
         console.error("Role assignment error:", roleError);
-        // Don't throw an error here, try to proceed anyway
+        throw new Error("Failed to assign role. Please try again.");
       }
 
       // Handle logo upload if provided
@@ -121,6 +121,11 @@ export const useCompanySetup = () => {
         } else {
           console.error("Logo upload error:", storageError);
           // Don't fail the registration if just the logo upload fails
+          toast({
+            title: "Logo upload failed",
+            description: "Your company was created but we couldn't upload the logo.",
+            variant: "warning",
+          });
         }
       }
 
