@@ -175,6 +175,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_company_admin_role: {
+        Args: { user_uuid: string; company_uuid: string }
+        Returns: undefined
+      }
       check_user_role_assignment: {
         Args: { user_uuid: string; company_uuid: string }
         Returns: boolean

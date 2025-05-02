@@ -88,9 +88,12 @@ export const useCompanySetup = () => {
 
       // 3. Use direct SQL RPC to avoid role assignment issues
       // This avoids the infinite recursion in RLS policies
-      const { error: roleError } = await supabase.rpc('assign_company_admin_role', {
-        user_uuid: session.userId,
-        company_uuid: company.id
+      const { error: roleError } = await supabase.functions.invoke('assign-company-role', {
+        body: { 
+          userId: session.userId, 
+          companyId: company.id,
+          role: 'company_admin'
+        }
       });
 
       if (roleError) {
