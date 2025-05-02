@@ -15,10 +15,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { currencies } from "@/data/currencies";
-import { RegisterFormValues } from "../../schemas/registerSchema";
+import { CompanyFormValues } from "@/pages/company/schemas/companySchema";
 
 interface CurrencySelectProps {
-  form: UseFormReturn<RegisterFormValues>;
+  form: UseFormReturn<CompanyFormValues>;
   isLoading: boolean;
 }
 

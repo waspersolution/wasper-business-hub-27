@@ -15,6 +15,7 @@ export const companySchema = z.object({
   timezone: z.string({
     required_error: "Please select a time zone",
   }),
+  logo: z.instanceof(File).optional(),
 }).refine((data) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);

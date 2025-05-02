@@ -11,14 +11,14 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form";
-import { RegisterFormValues } from "../schemas/registerSchema";
+import { CompanyFormValues } from "../../company/schemas/companySchema";
 import { DateFields } from "./accounting-settings/DateFields";
 import { CurrencySelect } from "./accounting-settings/CurrencySelect";
 import { TimezoneSelect } from "./accounting-settings/TimezoneSelect";
 import { useState } from "react";
 
 interface AccountingSettingsFormProps {
-  form: UseFormReturn<RegisterFormValues>;
+  form: UseFormReturn<CompanyFormValues>;
   isLoading: boolean;
   handleLogoChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }

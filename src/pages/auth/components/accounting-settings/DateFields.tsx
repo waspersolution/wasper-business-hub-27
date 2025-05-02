@@ -17,11 +17,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { RegisterFormValues } from "../../schemas/registerSchema";
+import { CompanyFormValues } from "@/pages/company/schemas/companySchema";
 import { cn } from "@/lib/utils";
 
 interface DateFieldsProps {
-  form: UseFormReturn<RegisterFormValues>;
+  form: UseFormReturn<CompanyFormValues>;
   isLoading: boolean;
 }
 
@@ -59,7 +59,11 @@ export function DateFields({ form, isLoading }: DateFieldsProps) {
                   mode="single"
                   selected={field.value}
                   onSelect={field.onChange}
-                  disabled={(date) => date > new Date()}
+                  disabled={(date) => {
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    return date > today;
+                  }}
                   initialFocus
                   className={cn("p-3 pointer-events-auto")}
                 />
@@ -104,7 +108,11 @@ export function DateFields({ form, isLoading }: DateFieldsProps) {
                   mode="single"
                   selected={field.value}
                   onSelect={field.onChange}
-                  disabled={(date) => date > new Date()}
+                  disabled={(date) => {
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    return date > today;
+                  }}
                   initialFocus
                   className={cn("p-3 pointer-events-auto")}
                 />

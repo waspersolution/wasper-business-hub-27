@@ -15,10 +15,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { timezones } from "@/data/timezones";
-import { RegisterFormValues } from "../../schemas/registerSchema";
+import { CompanyFormValues } from "@/pages/company/schemas/companySchema";
 
 interface TimezoneSelectProps {
-  form: UseFormReturn<RegisterFormValues>;
+  form: UseFormReturn<CompanyFormValues>;
   isLoading: boolean;
 }
 

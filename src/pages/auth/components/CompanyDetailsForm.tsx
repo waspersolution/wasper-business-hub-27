@@ -9,9 +9,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RegisterFormValues } from "../schemas/registerSchema";
+import { CompanyFormValues } from "../../company/schemas/companySchema";
 
 interface CompanyDetailsFormProps {
-  form: UseFormReturn<RegisterFormValues>;
+  form: UseFormReturn<RegisterFormValues & Partial<CompanyFormValues>>;
   isLoading: boolean;
 }
 

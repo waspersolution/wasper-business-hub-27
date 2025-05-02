@@ -61,6 +61,7 @@ const CompanySetup = () => {
   const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setSelectedLogo(event.target.files[0]);
+      form.setValue('logo', event.target.files[0]);
     }
   };
 
