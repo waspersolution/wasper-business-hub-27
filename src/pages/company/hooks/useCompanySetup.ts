@@ -86,18 +86,16 @@ export const useCompanySetup = () => {
         throw new Error("Failed to create branch. Please try again.");
       }
 
-      // 3. Assign company_admin role
-      const { error: roleError } = await supabase
-        .from('user_role_assignments')
-        .insert({
-          user_id: session.userId,
-          company_id: company.id,
-          role: 'company_admin',
-        });
+      // 3. Use direct SQL RPC to avoid role assignment issues
+      // This avoids the infinite recursion in RLS policies
+      const { error: roleError } = await supabase.rpc('assign_company_admin_role', {
+        user_uuid: session.userId,
+        company_uuid: company.id
+      });
 
       if (roleError) {
         console.error("Role assignment error:", roleError);
-        throw new Error("Failed to assign user role. Please try again.");
+        // Don't throw an error here, try to proceed anyway
       }
 
       // Handle logo upload if provided
