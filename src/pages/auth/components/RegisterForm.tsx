@@ -3,44 +3,80 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { startOfYear } from "date-fns";
-import { CompanyDetailsForm } from "./CompanyDetailsForm";
-import { AccountingSettingsForm } from "./AccountingSettingsForm";
+import { Input } from "@/components/ui/input";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { registerSchema, type RegisterFormValues } from "../schemas/registerSchema";
 
 interface RegisterFormProps {
   isLoading: boolean;
   onSubmit: (data: RegisterFormValues) => void;
-  handleLogoChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function RegisterForm({ isLoading, onSubmit, handleLogoChange }: RegisterFormProps) {
-  const currentYear = new Date().getFullYear();
-  const fiscalYearStart = startOfYear(new Date());
-  const accountingStart = new Date();
-
+export function RegisterForm({ isLoading, onSubmit }: RegisterFormProps) {
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       fullName: "",
       email: "",
       password: "",
-      companyName: "",
-      currency: "NGN",
-      timezone: "Africa/Lagos",
-      fiscalYearStart: fiscalYearStart,
-      accountingStart: accountingStart,
     },
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <CompanyDetailsForm form={form} isLoading={isLoading} />
-        <AccountingSettingsForm 
-          form={form} 
-          isLoading={isLoading}
-          handleLogoChange={handleLogoChange}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="fullName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Full Name</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="John Doe" 
+                  {...field} 
+                  disabled={isLoading}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="you@example.com" 
+                  {...field} 
+                  disabled={isLoading}
+                  type="email"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="********" 
+                  {...field} 
+                  disabled={isLoading}
+                  type="password"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
         <Button 
           type="submit" 

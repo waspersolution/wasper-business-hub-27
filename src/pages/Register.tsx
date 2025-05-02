@@ -12,7 +12,7 @@ import { RegisterForm } from "./auth/components/RegisterForm";
 import { useRegistration } from "./auth/hooks/useRegistration";
 
 const Register = () => {
-  const { isLoading, handleRegistration, handleLogoChange } = useRegistration();
+  const { isLoading, handleRegistration } = useRegistration();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8">
@@ -26,14 +26,13 @@ const Register = () => {
           <CardHeader>
             <CardTitle>Register</CardTitle>
             <CardDescription>
-              Create an account for your business
+              Create your account
             </CardDescription>
           </CardHeader>
           <CardContent>
             <RegisterForm 
               isLoading={isLoading}
               onSubmit={handleRegistration}
-              handleLogoChange={handleLogoChange}
             />
           </CardContent>
           <CardFooter className="flex justify-center">

@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,9 +29,46 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setSession } = useSession();
+  const location = useLocation();
+  const { session, setSession } = useSession();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [message] = useState<string | undefined>(
+    location.state?.message
+  );
+
+  // Show message from redirect if present
+  useEffect(() => {
+    if (message) {
+      toast({
+        title: "Notice",
+        description: message,
+      });
+    }
+  }, [message, toast]);
+
+  // If logged in already
+  useEffect(() => {
+    if (session.isAuthenticated) {
+      // Check if user has a company
+      const checkUserCompany = async () => {
+        const { data, error } = await supabase
+          .from('user_role_assignments')
+          .select('company_id')
+          .eq('user_id', session.userId)
+          .maybeSingle();
+
+        if (!error && data?.company_id) {
+          navigate('/dashboard');
+        } else if (session.isAuthenticated) {
+          // User is logged in but has no company
+          navigate('/company-setup');
+        }
+      };
+      
+      checkUserCompany();
+    }
+  }, [session, navigate]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -57,21 +94,23 @@ const Login = () => {
         .from('user_role_assignments')
         .select('role, company_id, branch_id')
         .eq('user_id', authData.user.id)
-        .single();
+        .maybeSingle();
 
-      if (roleError) throw roleError;
-
-      // Set session context with user info and role
+      // Set session context with user info
       setSession({
         userId: authData.user.id,
-        currentCompanyId: roleAssignments.company_id,
-        currentBranchId: roleAssignments.branch_id || '',
-        currentRole: roleAssignments.role as any, // Type assertion to make TS happy
+        currentCompanyId: roleAssignments?.company_id || '',
+        currentBranchId: roleAssignments?.branch_id || '',
+        currentRole: roleAssignments?.role as any || 'staff',
         isAuthenticated: true,
       });
       
-      // Redirect to dashboard
-      navigate("/dashboard");
+      // Redirect to dashboard if user has a company, otherwise to company setup
+      if (roleAssignments?.company_id) {
+        navigate("/dashboard");
+      } else {
+        navigate("/company-setup");
+      }
     } catch (error: any) {
       console.error("Login failed", error);
       toast({

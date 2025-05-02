@@ -1,3 +1,4 @@
+
 import { Routes, Route } from "react-router-dom";
 import Index from "@/pages/Index";
 import Dashboard from "@/pages/Dashboard";
@@ -6,6 +7,7 @@ import { DashboardLayout } from "@/components/Layout/DashboardLayout";
 import { Toaster } from "@/components/ui/toaster";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import CompanySetup from "@/pages/company/CompanySetup";
 import { SessionProvider } from "@/contexts/SessionContext";
 
 // Accounting routes
@@ -97,6 +99,7 @@ function App() {
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/company-setup" element={<CompanySetup />} />
 
         {/* Dashboard routes */}
         <Route path="/dashboard" element={<DashboardLayout>

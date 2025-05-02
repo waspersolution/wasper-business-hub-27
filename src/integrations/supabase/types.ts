@@ -179,6 +179,18 @@ export type Database = {
         Args: { user_uuid: string; company_uuid: string }
         Returns: boolean
       }
+      is_company_creator: {
+        Args: { company_id: string }
+        Returns: boolean
+      }
+      is_company_owner: {
+        Args: { company_id: string }
+        Returns: boolean
+      }
+      is_user_self: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
